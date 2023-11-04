@@ -91,39 +91,21 @@ int main(int argc, char** argv)
 
     bool exit = false;
     int bytes;
-    do {
+    while (1) {
         std::string command;
-        std::ostringstream msg;
-        char buffr[512];
-        std::cout << "Komenda: ";
+        std::string msg;
+        char rbuff[512] = { '\0' };
+        std::cout << "komenda: ";
         std::getline(std::cin, command);
-        send(ConnectSocket, command.c_str(), sizeof(char) * 512, 0);
-        exit = command.compare("exit") == 0;
-        bytes = recv(ConnectSocket, buffr, 512, 0);
-        std::cout << "Bytes recv: " << buffr;
-    } while (bytes > 0);
-
-    // shutdown the connection since no more data will be sent
-    iResult = shutdown(ConnectSocket, SD_SEND);
-    if (iResult == SOCKET_ERROR) {
-        printf("shutdown failed with error: %d\n", WSAGetLastError());
-        closesocket(ConnectSocket);
-        WSACleanup();
-        return 1;
+        int size = sizeof(command.c_str());
+        send(ConnectSocket, command.c_str(), size, 0);
+        bytes = recv(ConnectSocket, rbuff, sizeof(rbuff), 0);
+        if (bytes == 0) break;
+        msg = rbuff;
+        msg.erase(std::remove(msg.begin(), msg.end(), (char)-52));
+        std::cout << msg;
+        ZeroMemory(rbuff, 512);
     }
-
-    // Receive until the peer closes the connection
-    do {
-
-        iResult = recv(ConnectSocket, recvbuf, recvbuflen, 0);
-        if (iResult > 0)
-            printf("Bytes received: %d\n", iResult);
-        else if (iResult == 0)
-            printf("Connection closed\n");
-        else
-            printf("recv failed with error: %d\n", WSAGetLastError());
-
-    } while (iResult > 0);
 
     // cleanup
     closesocket(ConnectSocket);

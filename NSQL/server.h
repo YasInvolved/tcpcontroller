@@ -3,6 +3,8 @@
 #undef UNICODE
 
 #define WIN32_LEAN_AND_MEAN
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #define newline() std::cout << std::endl;
 
 #include <windows.h>
@@ -19,17 +21,29 @@
 #define DEFAULT_BUFLEN 512
 #define DEFAULT_PORT "21037"
 
-class Socket {
+struct Packet {
+	SOCKET sender;
+	char* senderaddress;
+};
+
+struct Command {
+	Packet pack;
+	std::string args;
+};
+
+class Server {
 public:
-	Socket();
-	~Socket();
+	Server(std::function<bool(void*)>);
+	~Server();
 	void startListen();
 private:
-	void handleClient(void* data);
+	std::function<bool(void*)> handle;
+	std::vector<std::thread> clients;
+	void serve();
 	struct addrinfo* result = NULL;
 	struct addrinfo hints;
 	WSADATA wsadata;
 	int iresult;
-	SOCKET ListenSocket = INVALID_SOCKET;
+	SOCKET listenSocket;
 };
 
