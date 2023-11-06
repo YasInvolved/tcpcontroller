@@ -1,8 +1,11 @@
 #include "server.h"
-#include "util.h"
 #include "commands.h"
+#include "util.h"
+#include "Script.h"
 #include <map>
+#include <string>
 
+// insert all default commands from commands.h
 std::map<std::string, std::function<bool(void*)>> commands;
 
 void default_case(Packet pack)
@@ -13,12 +16,13 @@ void default_case(Packet pack)
 // returns false if command is "logout"
 bool execute(std::string command, Packet pack)
 {
-    std::vector<std::string> parsed = split(command, " ");
+    std::string sep = " ";
+    std::vector<std::string> parsed = split(command, sep);
     auto it = commands.find(parsed[0].c_str());
     if (it != commands.end())
     {
         printf("Executing: %s\n", command.c_str());
-        return it->second((void*)new Command {pack, split(command, it->first.c_str())[1]});
+        return it->second((void*)new Command {pack, parsed[1]});
     }
     else {
         default_case(pack);
@@ -56,17 +60,23 @@ bool handleConnection(void* data)
 
 int main(void)
 {
+    showCursor(false);
     std::cout << "---------------------------------------------------------" << std::endl;
     std::cout << "           NSQL Remote Command Receiver V1.0a            " << std::endl;
     std::cout << "                   Made by YasInvolved                   " << std::endl;
     std::cout << "---------------------------------------------------------" << std::endl;
     newline();
-    std::cout << "Updating commands list..." << std::endl;
-    // all content is from "commands.h"
+    printf("Initiating...\n");
+    printf("Updating commands list...\n"); // TODO: Update commands list from script files
     commands["shutdown"] = tshutdown;
-    commands["cmd"] = cmd; 
+    commands["cancel"] = tshutdowncancell;
+    commands["cmd"] = cmd;
     commands["logout"] = logout;
     commands["steam"] = steam;
+    commands["discord"] = discord;
+    Script* script = new Script("D:\\scripts");
+    printf("\nFiles to parse: %d\n", script->getFilesSize());
+    script->parse();
     Server* s = new Server(handleConnection);
     s->startListen();
     return 0;

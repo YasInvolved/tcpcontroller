@@ -21,15 +21,24 @@
     <ClCompile Include="server.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="server.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="commands.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="server.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

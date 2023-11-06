@@ -63,7 +63,7 @@ void Server::startListen()
     std::future<void> listener = std::async(std::launch::async, &Server::serve, this);
     for (auto& p : clients)
     {
-        p.detach();
+        p.join();
     }
 }
 

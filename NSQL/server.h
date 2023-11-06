@@ -5,21 +5,17 @@
 #define WIN32_LEAN_AND_MEAN
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
-#define newline() std::cout << std::endl;
+
 
 #include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <thread>
-#include <string>
-#include <sstream>
-#include <iostream>
 #include <future>
 
-#define DEFAULT_BUFLEN 512
-#define DEFAULT_PORT "21037"
+constexpr int DEFAULT_BUFLEN = 512;
+constexpr char DEFAULT_PORT[] = "21037";
 
 struct Packet {
 	SOCKET sender;

@@ -1,16 +1,26 @@
-#include <vector>
-#include <string>
 #pragma once
+#include <string>
+#include <sstream>
+#include <iostream>
+#include <vector>
+#include <Windows.h>
+#include <math.h>
+#include <future>
 
-std::vector<std::string> split(std::string str, std::string separator)
-{
-    std::vector<std::string> tokens;
-    size_t pos;
-    while ((pos = str.find(separator)) != std::string::npos)
-    {
-        tokens.push_back(str.substr(0, pos));
-        str.erase(0, pos + separator.length());
-    }
-    tokens.push_back(str);
-    return tokens;
-}
+#define newline() std::cout << std::endl;
+
+std::vector<std::string> split(std::string& string, std::string& separator);
+int getConsoleWidth();
+void showCursor(bool flag);
+    
+class ProgressBar{
+public:
+    ProgressBar(int max);
+    ProgressBar(int max, std::string text);
+    void update();
+private:
+    void draw();
+    std::string text;
+    float progress;
+    int current, max, pos, iter, width = getConsoleWidth() / 1.61;
+};
