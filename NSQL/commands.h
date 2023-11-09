@@ -7,7 +7,7 @@ bool tshutdown(void* data)
 {
 	Command* cmd = (Command*)data;
 	std::string command = "shutdown -s -t ";
-	command += std::to_string(std::stoi(cmd->args) * 60);
+	command += std::to_string(std::stoi(cmd->args[0]) * 60);
 	std::cout << command << std::endl;
 	system(command.c_str());
 	return true;
@@ -22,7 +22,12 @@ bool tshutdowncancell(void* data)
 bool cmd(void* data) 
 {
 	Command* cmd = (Command*)data;
-	system(cmd->args.c_str());
+	std::string command = "";
+	for (std::string arg : cmd->args)
+	{
+		command += arg + " ";
+	}
+	system(command.c_str());
 	return true;
 }
 

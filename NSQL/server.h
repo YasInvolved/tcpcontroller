@@ -24,7 +24,7 @@ struct Packet {
 
 struct Command {
 	Packet pack;
-	std::string args;
+	std::vector<std::string> args;
 };
 
 class Server {

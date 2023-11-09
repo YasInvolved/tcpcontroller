@@ -22,7 +22,8 @@ bool execute(std::string command, Packet pack)
     if (it != commands.end())
     {
         printf("Executing: %s\n", command.c_str());
-        return it->second((void*)new Command {pack, parsed[1]});
+        std::vector <std::string> args(parsed.begin() + 1, parsed.end());
+        return it->second((void*)new Command{ pack, args});
     }
     else {
         default_case(pack);
@@ -77,7 +78,7 @@ bool handleConnection(void* data)
     return true;
 }
 
-int main(void)
+int main(int argc, char** argv)
 {
     showCursor(false);
     std::cout << "---------------------------------------------------------" << std::endl;
@@ -93,7 +94,7 @@ int main(void)
     commands["logout"] = logout;
     commands["steam"] = steam;
     commands["discord"] = discord;
-    Script* script = new Script("D:\\scripts");
+    Script* script = new Script(argv[1]);
     printf("\nFiles to parse: %d\n", script->getFilesArrSize());
     script->parse(&commands, &config);
     newline();
