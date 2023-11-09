@@ -3,7 +3,6 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
-#include <shellapi.h>
 #include <Windows.h>
 #include <math.h>
 #include <future>
@@ -11,6 +10,8 @@
 #define newline() std::cout << std::endl;
 
 std::vector<std::string> split(std::string string, std::string separator);
+std::string removeWhitespacesWithinWrap(std::string& data);
+
 int getConsoleWidth();
 void showCursor(bool flag);
     

@@ -14,6 +14,20 @@ std::vector<std::string> split(std::string str, std::string separator)
     return tokens;
 }
 
+std::string removeWhitespacesWithinWrap(std::string& data) 
+{
+    bool insideQuotes = false;
+    auto it = std::remove_if(data.begin(), data.end(), [&](char c) {
+        if (c == '"') {
+            insideQuotes = !insideQuotes; // Toggle insideQuotes when a quote is encountered
+            return false; // Don't remove the quote itself
+        }
+        return !insideQuotes && std::isspace(static_cast<unsigned char>(c));
+    });
+    data.erase(it, data.end());
+    return data;
+}
+
 int getConsoleWidth()
 {
     CONSOLE_SCREEN_BUFFER_INFO csbi;
