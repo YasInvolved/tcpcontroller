@@ -38,6 +38,7 @@ bool handleConnection(void* data)
     int bytes = 0;
     if (config.find("password") != config.end())
     {
+        printf("%s: Authorization required\n", pack->senderaddress);
         send(pack->sender, "Podaj haslo: \n", 15, 0);
         bytes = recv(pack->sender, buf, sizeof(buf), 0);
         std::string password = buf;
@@ -45,11 +46,13 @@ bool handleConnection(void* data)
             send(pack->sender, "zle haslo.\n", 15, 0);
             Sleep(100);
             shutdown(pack->sender, SD_SEND);
-            printf("connection closed due to bad password.\n");
+            printf("%s: connection closed due to bad password.\n", pack->senderaddress);
             return true;
         }
+        printf("%s: Authorization complete\n", pack->senderaddress);
         send(pack->sender, "Haslo poprawne.\n", 17, 0);
     }
+    ZeroMemory(&buf, sizeof(buf));
 
     while (1)
     {
