@@ -12,9 +12,10 @@ Script::Script(std::string path)
 	}
 }
 
-void Script::parse()
+void Script::parse(std::map<std::string, std::function<bool(void*)>>* funcMapPtr)
 {
-	ProgressBar* progressBar = new ProgressBar(files.size());
+	ProgressBar* progressBar = new ProgressBar(files.size(), "Parsing...");
+
 	for (std::string fileName : Script::files)
 	{
 		std::ifstream file(fileName);
@@ -22,9 +23,17 @@ void Script::parse()
 		while (std::getline(file, data))
 		{
 			if (data.starts_with("//") || data.size() == 0) continue;
-			std::string sep = "=";
 			data.erase(std::remove(data.begin(), data.end(), ' '));
-			std::vector<std::string> commandslist = split(data, sep);
+			std::vector<std::string> commandslist = split(data, "=");
+			std::pair<std::string, std::function<bool(void*)>> function = {
+				commandslist[0],
+				[=](void* data) {
+					ShellExecute(NULL, NULL, commandslist[0].c_str(), NULL, NULL, SW_SHOWNORMAL);
+					return true; 
+				}
+			};
+			funcMapPtr->insert(function);
+
 		}
 		file.close();
 		progressBar->update();

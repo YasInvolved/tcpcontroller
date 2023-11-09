@@ -33,8 +33,6 @@ bool steam(void* data)
 	ZeroMemory(&si, sizeof(si));
 	ZeroMemory(&pi, sizeof(pi));
 	si.cb = sizeof(si);
-	char buff[128];
-	ZeroMemory(&buff, sizeof(buff));
 	CreateProcess("C:\\PROGRA~2\\steam\\steam.exe", NULL, NULL, NULL, FALSE, 0, NULL, NULL, &si, &pi);
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);

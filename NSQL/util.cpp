@@ -1,6 +1,6 @@
 #include "util.h"
 
-std::vector<std::string> split(std::string& str, std::string& separator)
+std::vector<std::string> split(std::string str, std::string separator)
 {
     std::vector<std::string> tokens;
     size_t pos;

@@ -16,8 +16,7 @@ void default_case(Packet pack)
 // returns false if command is "logout"
 bool execute(std::string command, Packet pack)
 {
-    std::string sep = " ";
-    std::vector<std::string> parsed = split(command, sep);
+    std::vector<std::string> parsed = split(command, " ");
     auto it = commands.find(parsed[0].c_str());
     if (it != commands.end())
     {
@@ -76,7 +75,8 @@ int main(void)
     commands["discord"] = discord;
     Script* script = new Script("D:\\scripts");
     printf("\nFiles to parse: %d\n", script->getFilesSize());
-    script->parse();
+    script->parse(&commands);
+    newline();
     Server* s = new Server(handleConnection);
     s->startListen();
     return 0;
