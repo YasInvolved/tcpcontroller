@@ -78,7 +78,7 @@ bool handleConnection(void* data)
     return true;
 }
 
-int main(int argc, char** argv)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, int nCmdShow)
 {
     showCursor(false);
     std::cout << "---------------------------------------------------------" << std::endl;
@@ -94,7 +94,7 @@ int main(int argc, char** argv)
     commands["logout"] = logout;
     commands["steam"] = steam;
     commands["discord"] = discord;
-    Script* script = new Script(argv[1]);
+    Script* script = new Script(__argv[1]);
     printf("\nFiles to parse: %d\n", script->getFilesArrSize());
     script->parse(&commands, &config);
     newline();
