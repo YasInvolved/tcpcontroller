@@ -13,4 +13,5 @@ and choses the right lambda expression or previously defined functions (commands
 # TODO
 - GUI (gui branch, flutter)
 - comments for sure
+- installer
 - client (for now I'm using an app called TCP Client for android)
