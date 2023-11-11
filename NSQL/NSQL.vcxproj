@@ -139,9 +139,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="commands.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="server.h" />
     <ClInclude Include="util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="NSQL Server.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\kubab\Pictures\Dawid.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

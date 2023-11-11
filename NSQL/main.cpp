@@ -1,13 +1,49 @@
+#pragma comment(lib, "rpcrt4.lib")
 #include "server.h"
 #include "commands.h"
 #include "util.h"
 #include "Script.h"
+#include "resource.h"
 #include <map>
 #include <string>
+#include <rpc.h>
+
+#define ID_TRAY1 601
+#define CMSG_TRAY1 0x8001
 
 // insert all default commands from commands.h
 std::map<std::string, std::function<bool(void*)>> commands;
 std::map<std::string, std::string> config;
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
+{
+    NOTIFYICONDATA nid = {
+            .cbSize = sizeof(NOTIFYICONDATA),
+            .hWnd = hWnd,
+            .uID = ID_TRAY1,
+            .uFlags = 0
+    };
+    switch (msg)
+    {
+    case WM_CLOSE:
+        DestroyWindow(hWnd);
+        break;
+
+    case WM_DESTROY:
+        PostQuitMessage(0);
+        break;
+    case CMSG_TRAY1:
+        if (wParam == ID_TRAY1)
+            if (lParam == WM_LBUTTONDOWN)
+                ShowWindow(hWnd, SW_RESTORE);
+        break;
+
+    default:
+        return DefWindowProc(hWnd, msg, wParam, lParam);
+    }
+
+    return 0;
+}
 
 void default_case(Packet pack)
 {
@@ -78,6 +114,39 @@ bool handleConnection(void* data)
     return true;
 }
 
+void setupTray(HINSTANCE hInstance)
+{
+    WNDCLASSEX wc = {
+    .cbSize = sizeof(WNDCLASSEX),
+    .style = 0,
+    .lpfnWndProc = WndProc,
+    .cbClsExtra = 0,
+    .cbWndExtra = 0,
+    .hInstance = hInstance,
+    .hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE),
+    .hCursor = LoadCursor(NULL, IDC_ARROW),
+    .hbrBackground = (HBRUSH)(COLOR_WINDOW + 1),
+    .lpszMenuName = NULL,
+    .lpszClassName = "chuj123",
+    .hIconSm = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE),
+    };
+    RegisterClassEx(&wc);
+    HWND hWnd = CreateWindowEx(WS_EX_WINDOWEDGE, "chuj123", "okno spoko    ok?", WS_POPUP, CW_USEDEFAULT, CW_USEDEFAULT, 10, 10, NULL, NULL, hInstance, NULL);
+
+    NOTIFYICONDATA nid = {
+        .cbSize = sizeof(NOTIFYICONDATA),
+        .hWnd = hWnd,
+        .uID = ID_TRAY1,
+        .uFlags = NIF_ICON | NIF_MESSAGE | NIF_TIP,
+        .uCallbackMessage = CMSG_TRAY1,
+        .hIcon = (HICON)LoadImage(hInstance, MAKEINTRESOURCE(IDI_ICON1), IMAGE_ICON, 0, 0, LR_DEFAULTSIZE),
+    };
+    BOOL r;
+    r = Shell_NotifyIcon(NIM_ADD, &nid);
+    if (!r) MessageBox(hWnd, "No i chuj zjeba³o siê :(", "blad", MB_ICONEXCLAMATION);
+    return;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, int nCmdShow)
 {
     showCursor(false);
@@ -99,6 +168,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR pCmdLine, 
     script->parse(&commands, &config);
     newline();
     Server* s = new Server(handleConnection);
+    setupTray(hInstance);
     s->startListen();
     return 0;
 }
