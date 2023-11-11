@@ -7,7 +7,7 @@ you can also set a "password" for client to authenticate.
 It creates a lambda expression and stores it in the map, so if user sends the command, it does sort of "switch case" things
 and choses the right lambda expression or previously defined functions (commands.h).
 
-#TODO
+# TODO
 - GUI (gui branch, flutter)
 - comments for sure
 - client (for now I'm using an app called TCP Client for android)
