@@ -11,7 +11,6 @@ and choses the right lambda expression or previously defined functions (commands
 "NSQL Server.exe" { Location of config folder e.g. C:\config } 
 
 # TODO
-- GUI (gui branch, flutter)
 - comments for sure
 - installer
 - client (for now I'm using an app called TCP Client for android)
