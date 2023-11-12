@@ -135,6 +135,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Script.cpp" />
     <ClCompile Include="server.cpp" />
+    <ClCompile Include="tray.cpp" />
     <ClCompile Include="util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -142,6 +143,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="Script.h" />
     <ClInclude Include="server.h" />
+    <ClInclude Include="tray.h" />
     <ClInclude Include="util.h" />
   </ItemGroup>
   <ItemGroup>

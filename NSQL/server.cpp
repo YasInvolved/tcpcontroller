@@ -5,9 +5,9 @@ Constructor:
 *   initializes the Server structure
 */
 
-Server::Server(std::function<bool(void*)> handleclient)
+Server::Server(std::function<bool(void*)> handleClient)
 {
-    handle = handleclient;
+    Server::handle = handleClient;
     Server::iresult = WSAStartup(MAKEWORD(2, 2), &wsadata);
     if (Server::iresult != 0)
     {
@@ -61,9 +61,17 @@ void Server::startListen()
 {
     printf("Start listening on port %s\n", DEFAULT_PORT);
     std::future<void> listener = std::async(std::launch::async, &Server::serve, this);
-    for (auto& p : clients)
+    hWnd = createDummyWindow(GetModuleHandle(NULL));
+    MSG msg;
+    while (GetMessage(&msg, hWnd, 0, 0))
     {
-        p.join();
+        TranslateMessage(&msg);
+        DispatchMessage(&msg);
+        if (clients.size() > 0)
+        for (auto& p : clients)
+        {
+            p.detach();
+        }
     }
 }
 
@@ -78,6 +86,7 @@ void Server::serve()
         ClientSocket = accept(listenSocket, (SOCKADDR*)&sockaddr, &socklen);
         char* addr = inet_ntoa(sockaddr.sin_addr);
         printf("Got connection from %s\n", addr);
-        clients.emplace_back(std::thread(handle, (void*)new Packet {ClientSocket, addr}));
+        PostMessage(hWnd, CM_JOINED, (WPARAM)addr, 0);
+        clients.emplace_back(std::thread(handle, (void*)new Packet{ ClientSocket, addr }));
     }
 }

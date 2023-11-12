@@ -6,13 +6,13 @@
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 
 
-
 #include <windows.h>
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <future>
+#include "tray.h"
 
 constexpr int DEFAULT_BUFLEN = 512;
 constexpr char DEFAULT_PORT[] = "21037";
@@ -29,7 +29,7 @@ struct Command {
 
 class Server {
 public:
-	Server(std::function<bool(void*)>);
+	Server(std::function<bool(void*)> handleClient);
 	~Server();
 	void startListen();
 private:
@@ -41,5 +41,6 @@ private:
 	WSADATA wsadata;
 	int iresult;
 	SOCKET listenSocket;
+	HWND hWnd;
 };
 
