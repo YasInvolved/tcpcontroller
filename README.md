@@ -10,6 +10,11 @@ and choses the right lambda expression or previously defined functions (commands
 # Usage
 "NSQL Server.exe" { Location of config folder e.g. C:\config } 
 
+# config file convention ({filename}.nsql)
+config.password = password
+commandname = file or URL you want to open
+commandname = "path to file with spaces"
+
 # TODO
 - comments for sure
 - installer
